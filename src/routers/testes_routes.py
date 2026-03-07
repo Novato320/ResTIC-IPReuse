@@ -49,7 +49,7 @@ class UsuarioSchema(BaseModel):
     senha: str
     """
     class Config:
-        from_attributes = True # aparentemente relacionado ao sql alchemy
+        from_attributes = True # aparentemente relacionado ao sql alchemy, faz os dados virem como classe em vez de dicionario
     """
 
 @router.post("/schema")

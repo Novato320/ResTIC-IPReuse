@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from supabase import Client
+from src.dependencies.banco_dependencies import pegar_client_supabase
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -10,9 +12,19 @@ def home():
     return {"mensagem": "Acessou rota padrão de autenticação"}
 
 @router.post("/criar_conta")
-def criar_conta(email: str, senha: str):
+def criar_conta(email: str, senha: str, banco:Client = Depends(pegar_client_supabase)):
     pass
 
 @router.post("/logar")
-def logar(email: str, senha: str):
-    pass
+def logar(email: str, senha: str, banco:Client = Depends(pegar_client_supabase)):
+    
+    response = (
+    banco.table("users")
+    .select("*")
+    .eq("email", email)
+    .single()
+    .execute()
+    )
+
+    print(response)
+    return response
